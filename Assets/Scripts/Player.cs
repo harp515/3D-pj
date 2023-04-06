@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public float speed;
+
     float hAxis;
     float vAxis;
+    float wDown;
+
 
     Vector3 moveVec;
 
-    void Start()
+    Animator anim;
+
+
+    void Awake()
     {
-        
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -19,5 +26,13 @@ public class Player : MonoBehaviour
     {
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
+        wDown = Input.GetButton("Walf");
+
+        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+
+        transform.position += moveVec * speed * Time.deltaTime;
+
+        anim.SetBool("IsRun", moveVec != Vector3.zero);
+        anim.SetBool("IsRun", wDown);
     }
 }
