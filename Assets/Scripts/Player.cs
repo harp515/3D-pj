@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 
     float hAxis;
     float vAxis;
-    float wDown;
+    bool wDown;
 
 
     Vector3 moveVec;
@@ -20,19 +20,17 @@ public class Player : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
-        wDown = Input.GetButton("Walf");
+        wDown = Input.GetButton("Walk");
 
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
         transform.position += moveVec * speed * Time.deltaTime;
 
         anim.SetBool("IsRun", moveVec != Vector3.zero);
-        anim.SetBool("IsRun", wDown);
+        anim.SetBool("IsWalk", wDown);
     }
 }
