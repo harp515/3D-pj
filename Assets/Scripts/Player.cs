@@ -5,11 +5,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed;
+    public GameObject[] weapons;
+    public bool[] hasWeapons;
 
     float hAxis;
     float vAxis;
     bool wDown;
     bool jDown;
+    bool iDown;
 
     bool isJump;
     bool isDodge;
@@ -18,8 +21,9 @@ public class Player : MonoBehaviour
     Vector3 DodgeVec;
 
     Animator anim;
-
     Rigidbody rigid;
+
+    GameObject nearObject;
 
 
     void Awake()
@@ -34,13 +38,28 @@ public class Player : MonoBehaviour
         Turn();
         Jump();
         Dodge();
+        Interation();
     }
-    void GetInput()
+
+    void Interation()
+    {
+        if (iDown && nearObject != null && !isJump && !isDodge) {
+            if(nearObject.tag == "Weapon") {
+                Item item = nearObject.GetComponent<Item>();
+                int weaponIndex = item.value;
+                hasWeapons[weaponIndex] = true; // 아이템 정보를 가져와서 해당 무기 입수를 확인
+
+                Destroy(nearObject);
+            }
+        }
+    }
+    void GetInput() //방향 전환, 점프, 회피
     {
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
+        iDown = Input.GetButtonDown("Interation");
     }
     void Move()
     {
@@ -90,5 +109,15 @@ public class Player : MonoBehaviour
             anim.SetBool("isJump", false);
             isJump = false;
         }
+    }
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Weapon") {
+            nearObject = other.gameObject;
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        
     }
 }

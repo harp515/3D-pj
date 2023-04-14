@@ -9,6 +9,7 @@ public class Camera : MonoBehaviour
 
     void Update()
     {
+        //카메라가 플레이어를 따라 다니게 함
         transform.position = target.position + offset;
     }
 }
