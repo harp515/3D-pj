@@ -28,10 +28,12 @@ public class Player : MonoBehaviour
     bool sDown1;
     bool sDown2;
     bool sDown3;
+    bool fDown;
     
     bool isSwap;
     bool isJump;
     bool isDodge;
+    bool isFireDelay;
 
     Vector3 moveVec;
     Vector3 DodgeVec;
@@ -40,8 +42,9 @@ public class Player : MonoBehaviour
     Rigidbody rigid;
 
     GameObject nearObject;
-    GameObject equipWeapon;
+    Weapon equipWeapon;
     int equipWeaponIndex = -1;
+    float fireDelay;
 
     void Awake()
     {
@@ -57,6 +60,7 @@ public class Player : MonoBehaviour
         Dodge();
         Interation();
         Swap();
+        Attack();
     }
 
     void Interation()
@@ -77,6 +81,7 @@ public class Player : MonoBehaviour
         vAxis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
+        fDown = Input.GetButtonDown("Fire1");
         iDown = Input.GetButtonDown("Interation");
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
@@ -114,12 +119,12 @@ public class Player : MonoBehaviour
 
         if ((sDown1 || sDown2 || sDown3) && !isJump && !isDodge && !isSwap) {
             if (equipWeapon != null) {
-                equipWeapon.SetActive(false);
+                equipWeapon.gameObject.SetActive(false);
             }
 
             equipWeaponIndex = weaponIndex;
-            equipWeapon = weapons[weaponIndex];
-            equipWeapon.SetActive(true);
+            equipWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+            equipWeapon.gameObject.SetActive(true);
 
             anim.SetTrigger("doSwap");
 
@@ -145,6 +150,22 @@ public class Player : MonoBehaviour
             isJump = true;
         }
     }
+
+    void Attack()
+    {
+        if (equipWeapon == null)
+            return;
+        
+        fireDelay += Time.deltaTime;
+        isFireDelay = equipWeapon.rate < fireDelay;
+
+        if(fDown && isFireDelay && !isDodge && !isSwap) {
+            equipWeapon.Use();
+            anim.SetTrigger("doSwing");
+            fireDelay = 0;
+        }
+    }
+
     void Dodge()
     {
         if (jDown && moveVec != Vector3.zero && !isJump && !isDodge && !isSwap) {
