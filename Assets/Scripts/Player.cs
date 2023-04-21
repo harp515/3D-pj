@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     bool isSwap;
     bool isJump;
     bool isDodge;
-    bool isFireDelay;
+    bool isFireDelay = true;
 
     Vector3 moveVec;
     Vector3 DodgeVec;
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
         if(isDodge) {
             moveVec = DodgeVec;
         }
-        if(isSwap) {
+        if(isSwap || !isFireDelay) {
             moveVec = Vector3.zero;
         }
 
@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
 
         if(fDown && isFireDelay && !isDodge && !isSwap) {
             equipWeapon.Use();
-            anim.SetTrigger("doSwing");
+            anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
             fireDelay = 0;
         }
     }
