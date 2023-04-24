@@ -7,6 +7,8 @@ TagManager:
   - Floor
   - Item
   - Weapon
+  - Wall
+  - Melee
   layers:
   - Default
   - TransparentFX
