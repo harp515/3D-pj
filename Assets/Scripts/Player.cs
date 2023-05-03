@@ -29,11 +29,13 @@ public class Player : MonoBehaviour
     bool sDown2;
     bool sDown3;
     bool fDown;
+    bool rDown;
     
     bool isSwap;
     bool isJump;
     bool isDodge;
     bool isFireDelay = true;
+    bool isReload;
 
     Vector3 moveVec;
     Vector3 DodgeVec;
@@ -58,11 +60,33 @@ public class Player : MonoBehaviour
         Turn();
         Jump();
         Dodge();
+        Reload();
         Interation();
         Swap();
         Attack();
     }
+    void Reload()
+    {
+        if (equipWeapon == null)
+            return;
+        if (equipWeapon.type == Weapon.Type.Melee)
+            return;
+        if (ammo == 0)
+            return;
+        if (rDown && !isJump && !isDodge && !isSwap && !isFireDelay) {
+            anim.SetTrigger("doReload");
+            isReload = true;
 
+            Invoke("ReloadOut", 0.5f);
+        }
+    }
+    void ReloadOut()
+    {
+        int reAmmo = ammo < equipWeapon.maxAmmo ? ammo : equipWeapon.maxAmmo;
+        equipWeapon.curAmmo = reAmmo;
+        ammo -= reAmmo;
+        isReload = false;
+    }
     void Interation()
     {
         if (iDown && nearObject != null && !isJump && !isDodge) {
@@ -83,6 +107,7 @@ public class Player : MonoBehaviour
         jDown = Input.GetButtonDown("Jump");
         fDown = Input.GetButton("Fire1");
         iDown = Input.GetButtonDown("Interation");
+        rDown = Input.GetButtonDown("Reload");
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         sDown3 = Input.GetButtonDown("Swap3");
