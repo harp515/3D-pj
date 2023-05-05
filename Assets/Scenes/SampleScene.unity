@@ -187,6 +187,8 @@ MonoBehaviour:
   bullet: {fileID: 0}
   bulletCasePos: {fileID: 0}
   bulletCase: {fileID: 0}
+  maxAmmo: 0
+  curAmmo: 0
 --- !u!1 &28814618 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1509416925549156319, guid: a2e051660762cbe4494c17a095a95e10, type: 3}
@@ -218,6 +220,8 @@ MonoBehaviour:
   bullet: {fileID: 2998794318188145010, guid: d960fbd7ff62d45aaa238bd618786085, type: 3}
   bulletCasePos: {fileID: 598253316}
   bulletCase: {fileID: 2985553819171233720, guid: e215571b0b2754789bfc311774a22c9f, type: 3}
+  maxAmmo: 30
+  curAmmo: 30
 --- !u!1 &145503469
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,6 +2580,8 @@ MonoBehaviour:
   bullet: {fileID: 8418932313420560690, guid: 0770e803146754e92a2846e31f9b852b, type: 3}
   bulletCasePos: {fileID: 1045916348}
   bulletCase: {fileID: 2985553819171233720, guid: e215571b0b2754789bfc311774a22c9f, type: 3}
+  maxAmmo: 60
+  curAmmo: 60
 --- !u!1001 &2079102692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2844,7 +2850,7 @@ MonoBehaviour:
   - {fileID: 1335872835}
   - {fileID: 23690640}
   hasGrenades: 0
-  ammo: 0
+  ammo: 100
   coin: 0
   health: 10
   maxAmmo: 999

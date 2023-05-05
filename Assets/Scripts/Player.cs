@@ -73,17 +73,17 @@ public class Player : MonoBehaviour
             return;
         if (ammo == 0)
             return;
-        if (rDown && !isJump && !isDodge && !isSwap && !isFireDelay) {
+        if (rDown && !isJump && !isDodge && !isSwap && isFireDelay) {
             anim.SetTrigger("doReload");
             isReload = true;
 
-            Invoke("ReloadOut", 0.5f);
+            Invoke("ReloadOut", 1.5f);
         }
     }
     void ReloadOut()
     {
         int reAmmo = ammo < equipWeapon.maxAmmo ? ammo : equipWeapon.maxAmmo;
-        equipWeapon.curAmmo = reAmmo;
+        equipWeapon.curAmmo += reAmmo;
         ammo -= reAmmo;
         isReload = false;
     }
@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
         if(isDodge) {
             moveVec = DodgeVec;
         }
-        if(isSwap || !isFireDelay) {
+        if(isSwap || !isFireDelay || isReload) {
             moveVec = Vector3.zero;
         }
 
@@ -142,7 +142,7 @@ public class Player : MonoBehaviour
         if (sDown2) weaponIndex = 1;
         if (sDown3) weaponIndex = 2;
 
-        if ((sDown1 || sDown2 || sDown3) && !isJump && !isDodge && !isSwap) {
+        if ((sDown1 || sDown2 || sDown3) && !isJump && !isDodge && !isSwap && !isReload) {
             if (equipWeapon != null) {
                 equipWeapon.gameObject.SetActive(false);
             }
@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
 
     void Dodge()
     {
-        if (jDown && moveVec != Vector3.zero && !isJump && !isDodge && !isSwap) {
+        if (jDown && moveVec != Vector3.zero && !isJump && !isDodge && !isSwap && !isReload) {
             DodgeVec = moveVec;
             speed *= 2;
             anim.SetTrigger("doDodge");
