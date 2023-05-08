@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public bool[] hasWeapons;
     public GameObject[] grenades;
     public int hasGrenades;
+    public Camera followCamera;
 
     float hAxis;
     float vAxis;
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour
             anim.SetTrigger("doReload");
             isReload = true;
 
-            Invoke("ReloadOut", 1.5f);
+            Invoke("ReloadOut", 3f);
         }
     }
     void ReloadOut()
@@ -164,7 +165,18 @@ public class Player : MonoBehaviour
     }
     void Turn()
     {
+        //1. 키보드로 움직이는 카메라
         transform.LookAt(transform.position + moveVec);
+        //2. 마우스로 움직이는 카메라
+        if (fDown) {
+            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayHit;
+            if (Physics.Raycast(ray,out rayHit,100)) {
+                Vector3 nextVec = rayHit.point - transform.position;
+                nextVec.y = 0;
+                transform.LookAt(transform.position + nextVec);
+            }
+        }
     }
     void Jump()
     {
